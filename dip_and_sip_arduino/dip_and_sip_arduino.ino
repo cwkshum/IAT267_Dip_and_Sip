@@ -35,7 +35,7 @@ void loop() {
 
     //'a' packet starts 
       Serial.print("a");
-      Serial.print(val_distance); 
+      Serial.print(val_light); 
       Serial.print("a"); 
       Serial.println(); 
       //'a' packet ends  

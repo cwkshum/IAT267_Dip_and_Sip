@@ -4,6 +4,7 @@ PFont font;
 
 int valL_sensor;
 
+boolean showButton = true;
 int buttonX;
 int buttonY = 450;
 int buttonWidth = 150;
@@ -68,16 +69,19 @@ void draw(){
         if(timer < 0){
           timer = 7200;
           startTimer = false;
+          showButton = true;
         }
       }
       
       
       
       if(valL_sensor < 15){
-        fill(153);
-        rect(buttonX, buttonY, buttonWidth, buttonHeight, 7);
-        fill(0);
-        text("Start", width/2 - 25, 485);
+        if(showButton){
+          fill(153);
+          rect(buttonX, buttonY, buttonWidth, buttonHeight, 7);
+          fill(0);
+          text("Start", width/2 - 25, 485);
+        }
         port.write('H');
       } 
       else {
@@ -97,5 +101,6 @@ void mouseClicked() {
     fill(0);
     text("clicked!", 0, 485);
     startTimer = true;
+    showButton = false;
   }
 }
