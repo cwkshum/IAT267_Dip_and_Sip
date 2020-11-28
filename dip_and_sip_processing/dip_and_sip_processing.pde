@@ -4,92 +4,133 @@ PFont font;
 
 int valL_sensor;
 
+// Initialize Start buttons
 boolean showButton = true;
 int buttonX;
-int buttonY = 450;
-int buttonWidth = 150;
-int buttonHeight = 50;
+int buttonY = 420;
+int buttonWidth = 200;
+int buttonHeight = 80;
 
+// Initialize timers
 boolean startTimer = false;
-int timer = 7200;
+int timer = 1200;
+int minuteTimer = 2;
+int secTimer = 600;
 
 byte[] inBuffer = new byte[255]; //size of the serial buffer to allow for end of data characters and all chars (see arduino code)
 
 void setup(){
-  size(600, 600); //size of window
+  //size of window
+  size(600, 600); 
   
-  buttonX = (width/2 - 75);
-  
+  buttonX = (width/2 - 100);
+  background(176, 176, 234);
   noStroke();
-  //frameRate(10); // Run 10 frames per second
+  
+  // Run 10 frames per second
+  frameRate(10); 
   
   // Open the port that the board is connected to and use the same speed (9600 bps)
   port = new Serial(this, Serial.list()[4], 9600);
   
-  font = loadFont("ArialMT-24.vlw"); 
+  // Load Futura font
+  font = loadFont("Futura-Medium-120.vlw"); 
 }
 
 void draw(){
-  if (0 < port.available()) { // If data is available to read,
+  // Runs if data is available to read
+  if (0 < port.available()) { 
     println(" ");
     port.readBytesUntil('&', inBuffer);  //read in all data until '&' is encountered
     
     if (inBuffer != null) {
       String myString = new String(inBuffer);
-      //println(myString);  //for testing only
       
-      
-      //p is all sensor data (with a's and b's) ('&' is eliminated) ///////////////
-      
+      // p is all sensor data (with a's and b's) ('&' is eliminated)
       String[] p = splitTokens(myString, "&");  
-      if (p.length < 2) return;  //exit this function if packet is broken
-      //println(p[0]);   //for testing only
+      if (p.length < 2){ 
+        return;  //exit this function if packet is broken
+      }
       
-      
-      //get distance sensor reading //////////////////////////////////////////////////
-      
+      // Get light sensor reading 
       String[] light_sensor = splitTokens(p[0], "a");  //get distance sensor reading 
-      if (light_sensor.length != 3) return;  //exit this function if packet is broken
-      //println(light_sensor[1]);
+      if (light_sensor.length != 3){ 
+        return;  //exit this function if packet is broken
+      }
       valL_sensor = int(light_sensor[1]);
       
+      // Print Light Sensor reading to console
       print("light sensor:");
       print(valL_sensor);
       println(" ");  
       
-      //display square and circle with text above, to illustrate functionality of code
-      background(245);
-      fill(0);
-      stroke(0);
+      background(176, 176, 234);
       textFont(font); 
+      textAlign(CENTER);
       
+      // Display Project Name
+      fill(255, 255, 255);
+      textSize(60);
+      text("Dip & Sip", width/2, 130);
+      
+      // Timer Display
       if (startTimer){
-        text(timer/60, 210, 170);
+        fill(255, 255, 255);
+        textSize(40);
+        text("Your tea will be ready in:", width/2, height/2 - 80);
+        textSize(120);
         timer--;
+        
+        // Decreasing the Timer
+        if (timer > 1190){
+          // Timer at 2min
+          text(minuteTimer+":00", width/2, height/2 + 50);
+        } else if (timer == 1190){
+          // Timer at 1:59min
+          minuteTimer--;
+          secTimer--;
+          text(minuteTimer+":"+(secTimer/10), width/2, height/2 + 50);
+        } else if (timer == 600){
+          // Timer at 1min
+          minuteTimer--;
+          secTimer = 600;
+          text(minuteTimer+":00", width/2, height/2 + 50);
+        } else{
+          secTimer--;
+          if(secTimer < 100){
+            // When seconds timer is below 10
+            text(minuteTimer+":0"+(secTimer/10), width/2, height/2 + 50);
+          } else{
+            text(minuteTimer+":"+(secTimer/10), width/2, height/2 + 50);
+          }
+        }
+        // Reset Timer
         if(timer < 0){
-          timer = 7200;
+          timer = 1200;
+          minuteTimer = 2;
+          secTimer = 600;
           startTimer = false;
           showButton = true;
         }
       }
       
       
-      
-      if(valL_sensor < 15){
-        if(showButton){
-          fill(153);
-          rect(buttonX, buttonY, buttonWidth, buttonHeight, 7);
-          fill(0);
-          text("Start", width/2 - 25, 485);
+      if(showButton){
+        // Determine if cup has been place to show button
+        if(valL_sensor < 15){
+            // display 'Start' button
+            fill(225, 212, 255);
+            rect(buttonX, buttonY, buttonWidth, buttonHeight, 7);
+            fill(99, 99, 99);
+            textSize(48);
+            text("Start", width/2, 478);
+            // turn on green LED and turn off red LED
+            port.write('H');
+        } 
+        else {
+          // turn on green LED and turn off red LED
+          port.write('H');
         }
-        port.write('H');
-      } 
-      else {
-        //fill(153);
-        //rect(buttonX, buttonY, buttonWidth, buttonHeight, 7);
-        //fill(0);
-        //text("Start", width/2 - 25, 485);
-        port.write('L');
       }
 
     }
@@ -98,9 +139,9 @@ void draw(){
 
 void mouseClicked() {
   if (mouseX > buttonX && mouseX < buttonX + buttonWidth && mouseY > buttonY && mouseY < buttonY + buttonHeight){
-    fill(0);
-    text("clicked!", 0, 485);
     startTimer = true;
     showButton = false;
+    // turn on red LED and turn off green LED
+    port.write('L');
   }
 }
