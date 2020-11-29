@@ -53,7 +53,7 @@ void draw(){
       }
       
       // Get light sensor reading 
-      String[] light_sensor = splitTokens(p[0], "a");  //get distance sensor reading 
+      String[] light_sensor = splitTokens(p[0], "a");   
       if (light_sensor.length != 3){ 
         return;  //exit this function if packet is broken
       }
@@ -116,7 +116,7 @@ void draw(){
       
       
       if(showButton){
-        // Determine if cup has been place to show button
+        // Determine if cup has been placed to show button
         if(valL_sensor < 15){
             // display 'Start' button
             fill(225, 212, 255);
@@ -128,7 +128,7 @@ void draw(){
             port.write('H');
         } 
         else {
-          // turn on green LED and turn off red LED
+          // turn off green LED and turn on red LED
           port.write('H');
         }
       }
