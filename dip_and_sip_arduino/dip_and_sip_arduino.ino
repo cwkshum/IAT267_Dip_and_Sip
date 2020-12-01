@@ -38,7 +38,14 @@ void loop() {
       Serial.print(val_light); 
       Serial.print("a"); 
       Serial.println(); 
-      //'a' packet ends  
+      //'a' packet ends
+
+      //'b' packet starts 
+      Serial.print("b");
+      Serial.print(myservo.read()); 
+      Serial.print("b"); 
+      Serial.println(); 
+      //'b' packet ends
   
       Serial.print("&"); //denotes end of readings from both sensors
       Serial.println(); 
@@ -57,7 +64,7 @@ void loop() {
     if (incomingByte == 'H') { 
       digitalWrite(greenLED, HIGH);
       digitalWrite(redLED, LOW);
-      myservo.write(0); 
+      myservo.write(90); 
 
     //if the user has triggered the button, show the machine in a busy state
     }
@@ -68,6 +75,14 @@ void loop() {
       
       //when the steeping process has started, move the servo up and down to steep the tea       
       myservo.write(180);
+    }
+
+    if (incomingByte == 'U') {
+        myservo.write(120);
+    }
+
+    if (incomingByte == 'D') {
+        myservo.write(180);
     }
   }
 

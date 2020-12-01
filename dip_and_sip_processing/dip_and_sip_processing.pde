@@ -3,6 +3,7 @@ Serial port;
 PFont font;
 
 int valL_sensor;
+int valS_position;
 
 // Initialize Start buttons
 boolean showButton = true;
@@ -59,9 +60,20 @@ void draw(){
       }
       valL_sensor = int(light_sensor[1]);
       
+      // Get Servo Position reading 
+      String[] servo_position = splitTokens(p[0], "b");   
+      if (servo_position.length != 3){ 
+        return;  //exit this function if packet is broken
+      }
+      valS_position = int(servo_position[1]);
+      
       // Print Light Sensor reading to console
       print("light sensor:");
       print(valL_sensor);
+      println(" ");  
+      
+      print("Servo position:");
+      print(valS_position);
       println(" ");  
       
       background(176, 176, 234);
@@ -97,6 +109,14 @@ void draw(){
           text(minuteTimer+":00", width/2, height/2 + 50);
         } else{
           secTimer--;
+          if((secTimer)% 30 == 0){
+            println("UP/DOWN");
+            if(valS_position == 120){
+              port.write('D');
+            } else if(valS_position == 180){
+              port.write('U');
+            }
+          }
           if(secTimer < 100){
             // When seconds timer is below 10
             text(minuteTimer+":0"+(secTimer/10), width/2, height/2 + 50);
