@@ -32,7 +32,7 @@ void setup(){
   frameRate(10); 
   
   // Open the port that the board is connected to and use the same speed (9600 bps)
-  port = new Serial(this, Serial.list()[4], 9600);
+  port = new Serial(this, Serial.list()[2], 9600);
   
   // Load Futura font
   font = loadFont("Futura-Medium-120.vlw"); 
@@ -109,9 +109,9 @@ void draw(){
           text(minuteTimer+":00", width/2, height/2 + 50);
         } else{
           secTimer--;
-          if((secTimer)% 30 == 0){
+          if((secTimer)% 20 == 0){
             println("UP/DOWN");
-            if(valS_position == 120){
+            if(valS_position == 140){
               port.write('D');
             } else if(valS_position == 180){
               port.write('U');
@@ -137,7 +137,7 @@ void draw(){
       
       if(showButton){
         // Determine if cup has been placed to show button
-        if(valL_sensor < 15){
+        if(valL_sensor < 30){
             // display 'Start' button
             fill(225, 212, 255);
             rect(buttonX, buttonY, buttonWidth, buttonHeight, 7);

@@ -78,7 +78,7 @@ void loop() {
     }
 
     if (incomingByte == 'U') {
-        myservo.write(120);
+        myservo.write(140);
     }
 
     if (incomingByte == 'D') {
