@@ -39,14 +39,14 @@ void setup(){
   frameRate(10); 
   
   // Open the port that the board is connected to and use the same speed (9600 bps)
-  port = new Serial(this, Serial.list()[4], 9600);
+  port = new Serial(this, Serial.list()[2], 9600);
   
   // Load Futura font
   font = loadFont("Futura-Medium-120.vlw"); 
   
   
   //populate arrayList with 16 teacups
-  for (int i = 0; i < 17; i++) {
+  for (int i = 0; i < 7; i++) {
     teacups.add(new Teacup());
   }      
 }
@@ -172,7 +172,7 @@ void draw(){
             // display 'Start' button
             fill(225, 212, 255);
             rect(buttonX, buttonY, buttonWidth, buttonHeight, 7);
-            fill(99, 99, 99);
+            fill(176, 176, 234);
             textSize(48);
             text("Start", width/2, 478);
             // turn on green LED and turn off red LED
