@@ -39,7 +39,7 @@ void setup(){
   frameRate(10); 
   
   // Open the port that the board is connected to and use the same speed (9600 bps)
-  port = new Serial(this, Serial.list()[2], 9600);
+  port = new Serial(this, Serial.list()[4], 9600);
   
   // Load Futura font
   font = loadFont("Futura-Medium-120.vlw"); 
@@ -52,7 +52,6 @@ void setup(){
 }
 
 void draw(){
-  
   
   // Runs if data is available to read
   if (0 < port.available()) { 
@@ -95,10 +94,6 @@ void draw(){
       textFont(font); 
       textAlign(CENTER);
       
-      // Display Project Name
-      fill(255, 255, 255);
-      textSize(60);
-      text("Dip & Sip", width/2, 130);
       
       // Timer Display
       if (startTimer){
@@ -154,8 +149,16 @@ void draw(){
           secTimer = 600;
           startTimer = false;
           showButton = true;
+          // Display Completed Message
+          doneMessage = true;
         }
       }
+      
+      // Display Project Name
+      fill(255, 255, 255);
+      textSize(60);
+      text("Dip & Sip", width/2, 130);
+      
       
       // Display Completed Message
       if(doneMessage){
