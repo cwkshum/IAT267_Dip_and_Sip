@@ -5,6 +5,13 @@ PFont font;
 int valL_sensor;
 int valS_position;
 
+//store all the teacups
+ArrayList<Teacup> teacups = new ArrayList<Teacup>();
+
+// Hide Completed message
+boolean doneMessage = false;
+
+
 // Initialize Start buttons
 boolean showButton = true;
 int buttonX;
@@ -36,9 +43,17 @@ void setup(){
   
   // Load Futura font
   font = loadFont("Futura-Medium-120.vlw"); 
+  
+  
+  //populate arrayList with 16 teacups
+  for (int i = 0; i < 17; i++) {
+    teacups.add(new Teacup());
+  }      
 }
 
 void draw(){
+  
+  
   // Runs if data is available to read
   if (0 < port.available()) { 
     println(" ");
@@ -87,6 +102,14 @@ void draw(){
       
       // Timer Display
       if (startTimer){
+        
+        //draw and move all the teacups when the timer has started
+        for(int i = 0; i < teacups.size(); i++) {
+          Teacup t = teacups.get(i);
+          t.drawMe(); 
+          t.move();
+        }
+        
         fill(255, 255, 255);
         textSize(40);
         text("Your tea will be ready in:", width/2, height/2 - 80);
@@ -134,6 +157,11 @@ void draw(){
         }
       }
       
+      // Display Completed Message
+      if(doneMessage){
+          textSize(40);
+          text("Your tea is ready!", width/2, height/2);
+      }
       
       if(showButton){
         // Determine if cup has been placed to show button
@@ -159,9 +187,14 @@ void draw(){
 
 void mouseClicked() {
   if (mouseX > buttonX && mouseX < buttonX + buttonWidth && mouseY > buttonY && mouseY < buttonY + buttonHeight){
+    // Start Timer and Hide Button
     startTimer = true;
     showButton = false;
+
     // turn on red LED and turn off green LED
     port.write('L');
+
+    // hide done message
+    doneMessage = false;
   }
 }
