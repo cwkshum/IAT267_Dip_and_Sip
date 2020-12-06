@@ -5,7 +5,7 @@ PFont font;
 int valL_sensor;
 int valS_position;
 
-//store all the teacups
+//array list for teacups
 ArrayList<Teacup> teacups = new ArrayList<Teacup>();
 
 // Hide Completed message
@@ -25,7 +25,9 @@ int timer = 1200;
 int minuteTimer = 2;
 int secTimer = 600;
 
-byte[] inBuffer = new byte[255]; //size of the serial buffer to allow for end of data characters and all chars (see arduino code)
+/* size of the serial buffer to allow for end of 
+data characters and all chars (see arduino code) */
+byte[] inBuffer = new byte[255]; 
 
 void setup(){
   //size of window
@@ -45,7 +47,7 @@ void setup(){
   font = loadFont("Futura-Medium-120.vlw"); 
   
   
-  //populate arrayList with 16 teacups
+  //populate arrayList with 7 teacups
   for (int i = 0; i < 7; i++) {
     teacups.add(new Teacup());
   }      
@@ -53,7 +55,7 @@ void setup(){
 
 void draw(){
   
-  // Runs if data is available to read
+  // Run if data is available to read
   if (0 < port.available()) { 
     println(" ");
     port.readBytesUntil('&', inBuffer);  //read in all data until '&' is encountered
@@ -63,14 +65,16 @@ void draw(){
       
       // p is all sensor data (with a's and b's) ('&' is eliminated)
       String[] p = splitTokens(myString, "&");  
-      if (p.length < 2){ 
-        return;  //exit this function if packet is broken
+      if (p.length < 2) { 
+        //exit this function if packet is broken
+        return;  
       }
       
       // Get light sensor reading 
       String[] light_sensor = splitTokens(p[0], "a");   
-      if (light_sensor.length != 3){ 
-        return;  //exit this function if packet is broken
+      if (light_sensor.length != 3) { 
+         //exit this function if packet is broken
+        return; 
       }
       valL_sensor = int(light_sensor[1]);
       
@@ -81,15 +85,7 @@ void draw(){
       }
       valS_position = int(servo_position[1]);
       
-      // Print Light Sensor reading to console
-      print("light sensor:");
-      print(valL_sensor);
-      println(" ");  
-      
-      print("Servo position:");
-      print(valS_position);
-      println(" ");  
-      
+      //set background colour and text settings
       background(176, 176, 234);
       textFont(font); 
       textAlign(CENTER);
@@ -105,6 +101,7 @@ void draw(){
           t.move();
         }
         
+        //message
         fill(255, 255, 255);
         textSize(40);
         text("Your tea will be ready in:", width/2, height/2 - 80);

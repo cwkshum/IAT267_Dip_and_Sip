@@ -52,8 +52,8 @@ class Teacup {
   
   void drawMe() {
     pushMatrix(); 
+    //translate origin to center of the image
     translate(pos.x + 100, pos.y + 100);
-    
     //make the image smaller
     scale(0.7);
     rotate(ang);
