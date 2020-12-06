@@ -57,6 +57,16 @@ void loop() {
     //read the most recent byte that is a boolean
     incomingByte = Serial.read(); 
 
+    // Cup has not been detected/placed   
+    if (incomingByte == 'N') { 
+      //turn on green LED
+      digitalWrite(greenLED, LOW);
+      //turn off red LED
+      digitalWrite(redLED, HIGH);
+      //raise the teabag out of the cup
+      myservo.write(90); 
+    }
+
     // if the user has not placed a cup/triggered the button, show the machine in a ready state   
     if (incomingByte == 'H') { 
       //turn on green LED

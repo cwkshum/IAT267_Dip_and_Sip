@@ -176,7 +176,7 @@ void draw(){
         } 
         else {
           // turn off green LED and turn on red LED
-          port.write('H');
+          port.write('N');
         }
       }
 
