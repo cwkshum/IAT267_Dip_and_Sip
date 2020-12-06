@@ -41,7 +41,7 @@ void setup(){
   frameRate(10); 
   
   // Open the port that the board is connected to and use the same speed (9600 bps)
-  port = new Serial(this, Serial.list()[2], 9600);
+  port = new Serial(this, Serial.list()[4], 9600);
   
   // Load Futura font
   font = loadFont("Futura-Medium-120.vlw"); 
@@ -125,7 +125,6 @@ void draw(){
         } else{
           secTimer--;
           if((secTimer)% 20 == 0){
-            println("UP/DOWN");
             if(valS_position == 140){
               port.write('D');
             } else if(valS_position == 180){
